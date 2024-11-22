@@ -11,6 +11,9 @@
       // Abschluss der Authentifizierung und Weiterleitung zur FlutterFlow-App
       FHIR.oauth2.ready(
         function(client) {
+          // Client aufrufen
+          console.log("Client object:", client);
+          console.log("Token Response:", client.state.tokenResponse);
           // Zugriff auf Access Token
           const accessToken = client.state.tokenResponse.access_token;
 
