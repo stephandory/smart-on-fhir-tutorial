@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>DoryGo Redirect</title>
+  </head>
+  <body>
+    <script src="./lib/js/fhir-client-v0.1.12.js"></script>
+    <script>
+      // Abschluss der Authentifizierung und Weiterleitung zur FlutterFlow-App
+      FHIR.oauth2.ready(
+        function(client) {
+          // Client aufrufen
+          console.log("Client object:", client);
+          // Zugriff auf Access Token
+          const accessToken = client.tokenResponse.access_token;
+          
+          if (accessToken) {
+            console.log("Access Token:", accessToken);
+      
+            // Optional: Weiterleitung mit Token in der URL
+            window.location.href = `https://dorygo-us-dev.flutterflow.app?accessToken=${accessToken}`;
+          } else {
+            console.error("Kein Access Token verfügbar.");
+            document.body.innerHTML = "<p>Access Token konnte nicht abgerufen werden.</p>";
+          }
+        },
+        function(error) {
+          // Fehler bei der Authentifizierung
+          console.error("Authentication failed:", error);
+          document.body.innerHTML = "<p>Authentication failed. Please try again.</p>";
+        }
+      );
+    </script>
+  </body>
+</html>
