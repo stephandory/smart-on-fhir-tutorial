@@ -13,7 +13,8 @@
         function(client) {
           // Erfolgreiche Authentifizierung
           console.log("Authentication successful");
-          console.log("Access Token:", client.state.tokenResponse.access_token);
+          console.log("Client Object:", client);
+          console.log("Token Response:", client.state.tokenResponse);
 
           // Weiterleitung zur FlutterFlow-App
           window.location.href = "https://dorygo-us-dev.flutterflow.app";
