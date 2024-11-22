@@ -9,15 +9,21 @@
     <script src="./lib/js/fhir-client-v0.1.12.js"></script>
     <script>
       // Abschluss der Authentifizierung und Weiterleitung zur FlutterFlow-App
-      FHIR.oauth2.ready()
-        .then(client => {
+      FHIR.oauth2.ready(
+        function(client) {
+          // Erfolgreiche Authentifizierung
           console.log("Authentication successful");
+          console.log("Access Token:", client.state.tokenResponse.access_token);
+
+          // Weiterleitung zur FlutterFlow-App
           window.location.href = "https://dorygo-us-dev.flutterflow.app";
-        })
-        .catch(error => {
+        },
+        function(error) {
+          // Fehler bei der Authentifizierung
           console.error("Authentication failed:", error);
           document.body.innerHTML = "<p>Authentication failed. Please try again.</p>";
-        });
+        }
+      );
     </script>
   </body>
 </html>
