@@ -4,35 +4,29 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>DoryGo-Dev-SMART-App</title>
-    <link rel="stylesheet" type="text/css" href="./src/css/example-smart-app.css">
   </head>
   <body>
     <div id="errors"></div>
     <div id="loading" class="spinner">
-      <div class="bounce1"></div>
-      <div class="bounce2"></div>
-      <div class="bounce3"></div>
+      <p>Loading...</p>
     </div>
+
+    <!-- FHIR Client JS Library -->
     <script src="./lib/js/fhir-client-v0.1.12.js"></script>
     <script>
-      extractData().then(
-        function(p) {
-          console.log("Patient Data Loaded Successfully:", p);
-          window.location.href = "https://dorygo-us-dev.flutterflow.app";
-        },
-        function() {
-          document.getElementById("loading").style.display = "none";
-          document.getElementById("errors").innerHTML = "<p>Failed to call FHIR Service</p>";
-        }
-      );
+      // Extrahiere den Access Token und leite weiter
+      FHIR.oauth2.ready()
+        .then(client => {
+          const accessToken = client.state.tokenResponse.access_token;
+          console.log("Access Token:", accessToken);
 
-      async function extractData() {
-        const client = await FHIR.oauth2.ready();
-        console.log("Access Token:", client.state.tokenResponse.access_token);
-        const patient = await client.patient.read();
-        console.log("Patient Data:", patient);
-        return patient;
-      }
+          // Weiterleitung zur FlutterFlow-App mit Access Token
+          window.location.href = `https://dorygo-us-dev.flutterflow.app?code=${accessToken}`;
+        })
+        .catch(error => {
+          console.error("Fehler bei der Authentifizierung:", error);
+          document.getElementById("loading").innerText = "Failed to authenticate.";
+        });
     </script>
   </body>
 </html>
