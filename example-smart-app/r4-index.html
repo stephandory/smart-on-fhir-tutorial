@@ -8,28 +8,31 @@
   <body>
     <script src="./lib/js/fhir-client-v0.1.12.js"></script>
     <script>
-      // Abschluss der Authentifizierung und Weiterleitung zur FlutterFlow-App
+      // Handle authentication and redirection to the FlutterFlow web app
       FHIR.oauth2.ready(
-        function(client) {
-          // Client aufrufen
+        function (client) {
+          // Log the client object for debugging
           console.log("Client object:", client);
-          // Zugriff auf Access Token
+
+          // Retrieve the access token
           const accessToken = client.tokenResponse.access_token;
-          
+
           if (accessToken) {
             console.log("Access Token:", accessToken);
-      
-            // Optional: Weiterleitung mit Token in der URL
+
+            // Redirect to FlutterFlow app with access token in the query string
             window.location.href = `https://dorygo-us-dev.flutterflow.app?accessToken=${accessToken}`;
           } else {
-            console.error("Kein Access Token verfügbar.");
-            document.body.innerHTML = "<p>Access Token konnte nicht abgerufen werden.</p>";
+            console.error("Access Token not available.");
+            document.body.innerHTML =
+              "<p>Access Token could not be retrieved. Please try again.</p>";
           }
         },
-        function(error) {
-          // Fehler bei der Authentifizierung
+        function (error) {
+          // Handle authentication errors
           console.error("Authentication failed:", error);
-          document.body.innerHTML = "<p>Authentication failed. Please try again.</p>";
+          document.body.innerHTML =
+            "<p>Authentication failed. Please try again later.</p>";
         }
       );
     </script>
